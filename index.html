@@ -78,7 +78,7 @@
 <script>
 
    
-
+// "Seek out news from sources you find trustworthy and credible. Local reporting varies based on where you are, but some examples are <a href='https://themarkup.org/' target='_blank'>The Markup</a>, <a href='https://www.404media.co/' target='_blank'>404 Media</a>, <a href='https://theintercept.com/'>The Intercept</a>, or <a href='http://dropsitenews.com/' target='_blank'>Dropsite News</a>. Even college newsrooms can be better than what I tell you."
 
 const buttonData = {
   1: {
@@ -91,7 +91,7 @@ const buttonData = {
   },
   3: {
     question: "Read the news",
-    answer: "Seek out news from sources you find trustworthy and credible. Local reporting varies based on where you are, but some examples are The Markup, 404 Media, The Intercept, or Dropsite News. Even college newsrooms can be better than what I tell you."
+    answer: 'Seek out news from sources you find trustworthy and credible. Local reporting varies based on where you are, but some examples are The Markup, 404 Media, The Intercept, or Dropsite News. Even college newsrooms can be better than what I tell you.'
   },
   4: {
     question: "Weather forecast",
@@ -99,7 +99,7 @@ const buttonData = {
   },
     5: {
     question: "Music recs",
-    answer: "Music discovery is a beautiful journey in on and of itself. Ask your friends what they've been enjoying lately, find other fans' favorites on Rate Your Music or Album of the Year, read interviews with your favorite artists to see what they're listening to, read a music blog, or ask the barista what song is playing. When in doubt, show up to a record store and explore!"
+    answer: "Music discovery is a beautiful journey in on and of itself. Ask your friends what they've been enjoying lately, find other fans' favorites on Rate Your Music or Album of the Year, read a music blog, or ask the barista what song is playing. When in doubt, show up to a record store and explore!"
   },
     6: {
     question: "What to watch",
@@ -171,10 +171,12 @@ function handleClick(key, btnElement) {
   // Display chat log
   const chat_log = document.getElementById("chat-log");
   const intro = document.getElementsByClassName("intro")[0];
-  const title = document.getElementsByClassName("title")[0];
+  const title = document.getElementsByClassName("title")[2];
+  const container = document.getElementsByClassName("container")[0];
 
   chat_log.style.display = "inline-block";
   intro.classList.add("answer");
+  container.classList.add("active");
   if (title) title.classList.add("hide-title");
 
   const data = buttonData[key];
@@ -185,7 +187,7 @@ function handleClick(key, btnElement) {
 
   const questionDiv = document.createElement("div");
   questionDiv.className = "chat-question";
-  questionDiv.textContent = data.question;
+  questionDiv.innerHTML = data.question;
 
   const answerDiv = document.createElement("div");
   answerDiv.className = "chat-answer";
@@ -279,22 +281,13 @@ function handleClick(key, btnElement) {
 //   });
 // });
 
-function showAnswer(text) {
-        console.log("answer");  
-      const div = document.createElement('div');
-      div.className = 'answer';
-      div.textContent = text;
-
-      document.getElementsByClassName('container')[0].appendChild(div);
-}
-
 
 function typeText(element, text, speed = 30) {
-  element.textContent = "";
+  element.innerHTML = "";
   let index = 0;
 
   const interval = setInterval(() => {
-    element.textContent += text[index];
+    element.innerHTML += text[index];
     index++;
 
     if (index >= text.length) {

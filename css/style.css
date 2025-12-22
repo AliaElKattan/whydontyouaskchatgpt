@@ -23,6 +23,10 @@ body {
     margin-top: 35vh;
 }
 
+.container.active {
+    margin-top: 7vh;
+    height: 87vh;
+}
 .container h1 {
     color: white;
     text-align: center;
@@ -34,12 +38,19 @@ body {
 .intro {
     background-color: var(--main-chat);
     color: var(--main-text);
-    height: 18%;
+/*    height: 18%;*/
     border-radius: 35px;
     border-color: var(--border);
     border-style: solid;
     border-width: 1px;
     margin-top: 5%;
+
+}
+
+.intro, .more-section {
+    opacity: 0;
+    animation: fadeIn 3s ease forwards;
+    animation-delay: 8s;
 }
 
 
@@ -243,14 +254,14 @@ margin-left: 35%;
     }
 
     .menu button {
-        font-size: .7rem;
+        font-size: .8rem;
         padding: .4rem;
         height: 2.2rem;
         margin-right: 5px;
     }
 
     .intro {
-        height: 14%;
+/*        height: 14%;*/
     }
 
     .type {
@@ -288,7 +299,7 @@ margin-left: 35%;
     }
 
         .intro {
-        height: 17%;
+/*        height: 17%;*/
     }
 
 }
