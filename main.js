@@ -106,11 +106,13 @@ function handleClick(key, btnElement) {
   const chat_log = document.getElementById("chat-log");
   const intro = document.getElementsByClassName("intro")[0];
   const title = document.getElementsByClassName("title")[2];
+  const titles = document.getElementsByClassName("titles")[0];
   const container = document.getElementsByClassName("container")[0];
 
   chat_log.style.display = "inline-block";
   intro.classList.add("answer");
   container.classList.add("active");
+  titles.classList.add("hide");
   if (title) title.classList.add("hide-title");
 
   const data = buttonData[key];

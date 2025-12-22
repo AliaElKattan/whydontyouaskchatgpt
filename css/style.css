@@ -54,6 +54,10 @@ body {
 }
 
 
+.more-section {
+    margin-bottom: 5px;
+}
+
 .intro.answer {
 /*  transform: translateY(20rem);*/
 /*margin-top: 45    %;*/
@@ -88,7 +92,9 @@ body {
 
 }
 
-
+.titles.hide {
+    display: none;
+}
 
 .type {
   opacity: 1;
@@ -222,6 +228,7 @@ margin-left: 35%;
     height: 2.5rem;
     padding: .7rem;
     cursor: pointer;
+    margin-bottom: 5px;
 
 }
 
