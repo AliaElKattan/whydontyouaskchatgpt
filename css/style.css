@@ -55,6 +55,7 @@ body {
     inset: 0;
     opacity: 0;
     white-space: nowrap;
+    height: 3rem;
 }
 
 .title.hide-title {
