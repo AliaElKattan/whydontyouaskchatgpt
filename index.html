@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon.ico">
+
+
+    <title>BetterGPT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contentStyle.css">
+
+
+    <script src="main.js"></script>
+
+
+
+
+
+    <script src="offline/p5_v1-4-0.js"></script>
+</head>
+
+
+
+
+<body>
+  
+
+<div class="container">
+<h1 class="title">Why don't you ask ChatGPT?</h1>
+
+
+<div id="chat-log">
+
+<div id="chat-response">
+    <div id="chat-question"></div>
+    <div id="chat-answer"></div>
+</div>
+
+</div>
+
+<div class="intro"> 
+
+<p>Select any category below</p>
+    <div class="menu">
+
+<button class="menu-option" data-key="1"> Personal advice </button>
+<button class="menu-option" data-key="2"> Food recipe </button>
+<button class="menu-option" data-key="3"> Read the news </button>
+<button class="menu-option" data-key="4"> Weather forecast </button>
+<button class="menu-option" data-key="5"> Music recs </button>
+<button class="menu-option" data-key="6"> What to watch? </button>
+<button class="menu-option" data-key="7"> Write a story </button>
+<button class="menu-option" data-key="8"> Coding help </button>
+<button class="menu-option" data-key="9"> Write a letter </button>
+<button class="menu-option" data-key="10"> Design a logo </button>
+
+
+    </div>
+
+
+
+ </div>
+
+ <div class="more-section">
+  <button id="more-toggle">Looking for more?</button>
+  <div id="more-dropdown" class="more-dropdown" style="display: none;"></div>
+</div>
+
+</div>
+
+<script>
+
+   
+
+
+const buttonData = {
+  1: {
+    question: "Personal advice",
+    answer: "Have you tried speaking to a friend, family member, or other community member? If more pressing, have you tried consulting a licensed professional? Or perhaps, maybe this is something you need to think about long and hard on your own. A journal could help."
+  },
+  2: {
+    question: "Food recipe",
+    answer: "I can give you the average of all the recipes people posted on the internet, or you can go read or watch them yourself directly, and support the people actually helping you cook."
+  },
+  3: {
+    question: "Read the news",
+    answer: "Seek out news from sources you find trustworthy and credible. Local reporting varies based on where you are, but some examples are The Markup, 404 Media, The Intercept, or Dropsite News. Even college newsrooms can be better than what I tell you."
+  },
+  4: {
+    question: "Weather forecast",
+    answer: "Chatbots cannot tell you the weather. Look up the actual weather forecast."
+  },
+    5: {
+    question: "Music recs",
+    answer: "Music discovery is a beautiful journey in on and of itself. Ask your friends what they've been enjoying lately, find other fans' favorites on Rate Your Music or Album of the Year, read interviews with your favorite artists to see what they're listening to, read a music blog, or ask the barista what song is playing. When in doubt, show up to a record store and explore!"
+  },
+    6: {
+    question: "What to watch",
+    answer: "Movie and TV show recommendations can be sought from your friends and folks in your community, from other people's reviews such as on apps like Letterboxd, from the abundance of film review blogs on the internet, or simply by checking your nearest movie theatre."
+  },
+    7: {
+    question: "Write a story",
+    answer: "A great way to use your imagination. You can start by thinking of things in your head, writing them down, and then editing. You can even get advice from a few friends on what works and what doesn't!"
+  },
+    8: {
+    question: "Coding help",
+    answer: "Coding can be very difficult at times! Great resources include Stack Overflow and a million other sites on the internet, aggregating the collective knowledge, expertise, and continuous growth of millions of coders around the world."
+  },
+    9: {
+    question: "Write a letter",
+    answer: "Letter writing is meaningful and important for many purposes. I recommend finding a pen and paper, freeing up some time, and thinking carefully about what you want to say in your own voice"
+  },
+    10: {
+    question: "Design a logo",
+    answer: "Great idea! Have you tried hiring an artist, or using free design tools like Gimp, Inkspace, or Excalidraw?"
+  }
+};
+
+const menuContainer = document.querySelector(".menu");
+const allButtonKeys = Object.keys(buttonData);
+let shownButtons = [];
+const visibleCount = 3;
+
+// Helper function
+function getRandomElement(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+
+// Render buttons
+function renderButtons() {
+  menuContainer.innerHTML = "";
+
+  // Reset if all buttons have been shown
+  if (shownButtons.length === allButtonKeys.length) {
+    shownButtons = [];
+  }
+
+  const remainingButtons = allButtonKeys.filter(key => !shownButtons.includes(key));
+  const buttonsToShow = [];
+
+  while (buttonsToShow.length < visibleCount) {
+    const key = getRandomElement(remainingButtons);
+    if (!buttonsToShow.includes(key)) {
+      buttonsToShow.push(key);
+      shownButtons.push(key);
+    }
+  }
+
+  buttonsToShow.forEach(key => {
+    const btn = document.createElement("button");
+    btn.className = "menu-option";
+    btn.dataset.key = key;
+    btn.textContent = buttonData[key].question;
+
+    btn.addEventListener("click", () => handleClick(key, btn));
+    menuContainer.appendChild(btn);
+  });
+}
+
+
+// Handle button click
+function handleClick(key, btnElement) {
+  // Display chat log
+  const chat_log = document.getElementById("chat-log");
+  const intro = document.getElementsByClassName("intro")[0];
+  const title = document.getElementsByClassName("title")[0];
+
+  chat_log.style.display = "inline-block";
+  intro.classList.add("answer");
+  if (title) title.classList.add("hide-title");
+
+  const data = buttonData[key];
+  if (!data) return;
+
+  const chatResponse = document.createElement("div");
+  chatResponse.className = "chat-response active";
+
+  const questionDiv = document.createElement("div");
+  questionDiv.className = "chat-question";
+  questionDiv.textContent = data.question;
+
+  const answerDiv = document.createElement("div");
+  answerDiv.className = "chat-answer";
+
+  chatResponse.appendChild(questionDiv);
+  chatResponse.appendChild(answerDiv);
+  chat_log.appendChild(chatResponse);
+
+  typeText(answerDiv, data.answer, 25);
+
+  // Replace clicked button
+  const remainingButtons = allButtonKeys.filter(k => !shownButtons.includes(k));
+  if (remainingButtons.length === 0) {
+    // Reset if all buttons shown
+    shownButtons = [];
+    renderButtons();
+    return;
+  }
+
+  const newKey = getRandomElement(remainingButtons);
+  shownButtons.push(newKey);
+
+  btnElement.dataset.key = newKey;
+  btnElement.textContent = buttonData[newKey].question;
+  btnElement.onclick = () => handleClick(newKey, btnElement);
+}
+
+// const buttons = document.querySelectorAll(".menu-option");
+// const intro = document.getElementsByClassName("intro")[0];
+// const title = document.getElementsByClassName("title")[0];
+
+// const chat_log = document.getElementById("chat-log");
+
+// const responseContainer = document.getElementById("chat-response");
+// const chat_question = document.getElementById("chat-question");
+// const chat_answer = document.getElementById("chat-answer");
+
+
+// buttons.forEach(button => {
+//   button.addEventListener("click", () => {
+//     console.log("clicked!");
+
+//     chat_log.style.display = "inline-block"
+//     intro.classList.add("answer");
+//     title.classList.add("hide-title");
+//     // responseContainer.classList.add("active");
+
+//     let key = button.dataset.key;
+
+//     let data = buttonData[key];
+
+//     if(!data) return;
+    
+
+//     const chatResponse = document.createElement("div");
+//     chatResponse.className = "chat-response active";
+
+
+//     const questionDiv = document.createElement("div");
+//     questionDiv.className = "chat-question";
+//     questionDiv.textContent = data.question;
+
+//     const answerDiv = document.createElement("div");
+//     answerDiv.className = "chat-answer";
+
+//     chatResponse.appendChild(questionDiv);
+//     chatResponse.appendChild(answerDiv);
+
+//     document.getElementById("chat-log").appendChild(chatResponse);
+
+//     // chat_question.textContent = data.question;
+//     // chat_answer.textContent = data.answer;
+
+//     // showAnswer();
+
+//     typeText(answerDiv, data.answer, 25);
+
+
+
+//     // typeText(chat_answer, data.answer, 25);
+ 
+//     setTimeout(() => {
+//       // title.style.display = "none";
+//       // chat.classList.remove("hidden");
+
+//       // typeText(msg1, "Hi! 👋 How can I help you today?");
+//       // setTimeout(() => {
+//         // typeText(msg2, `I chose: ${button.textContent}`);
+//       // }, 1200);
+//     }, 600);
+//   });
+// });
+
+function showAnswer(text) {
+        console.log("answer");  
+      const div = document.createElement('div');
+      div.className = 'answer';
+      div.textContent = text;
+
+      document.getElementsByClassName('container')[0].appendChild(div);
+}
+
+
+function typeText(element, text, speed = 30) {
+  element.textContent = "";
+  let index = 0;
+
+  const interval = setInterval(() => {
+    element.textContent += text[index];
+    index++;
+
+    if (index >= text.length) {
+      clearInterval(interval);
+    }
+  }, speed);
+}
+
+renderButtons();
+
+ // Grab the dropdown elements
+const moreToggle = document.getElementById("more-toggle");
+const moreDropdown = document.getElementById("more-dropdown");
+
+// Toggle the dropdown visibility
+moreToggle.addEventListener("click", () => {
+  moreDropdown.style.display = moreDropdown.style.display === "none" ? "block" : "none";
+});
+
+// Populate the dropdown with all buttons
+function renderMoreDropdown() {
+  moreDropdown.innerHTML = "";
+
+  allButtonKeys.forEach(key => {
+    const btn = document.createElement("button");
+    btn.textContent = buttonData[key].question;
+    btn.dataset.key = key;
+
+    // Clicking any of these buttons behaves the same as main menu buttons
+    btn.addEventListener("click", () => {
+      handleClick(key, btn); // reuse main handleClick
+    });
+
+    moreDropdown.appendChild(btn);
+  });
+}
+
+// Initialize dropdown
+renderMoreDropdown();
+
+</script>
+
+</body>

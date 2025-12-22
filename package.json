@@ -1,0 +1,23 @@
+{
+  "name": "awzan",
+  "version": "1.0.0",
+  "description": "arabic awzan",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whatsthealgorithm/whatsthealgorithm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whatsthealgorithm/whatsthealgorithm/issues"
+  },
+  "homepage": "https://github.com/whatsthealgorithm/whatsthealgorithm#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
